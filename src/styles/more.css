@@ -399,3 +399,7 @@
 .pod-vis .lsch { height: auto; }
 .pod-3d { flex: none; }
 .pod { align-items: start; }
+
+.logo-mark { color: var(--acc); }
+.logo-mark svg { width: 30px; height: 30px; }
+.logo:hover .logo-mark { color: var(--acc2); }
