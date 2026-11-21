@@ -40,7 +40,8 @@ const STATIC_GROUPS = {
 const cmsFile = import.meta.glob('./cms.json', { eager: true, import: 'default' }) as Record<string, any>;
 export const CMS = cmsFile['./cms.json'] ?? null;
 export const PRODUCTS: Product[] = CMS?.products?.length ? CMS.products : STATIC_PRODUCTS;
-const from = (g: string, fb: number) => { const ps = PRODUCTS.filter((p) => p.group === g); return ps.length ? Math.min(...ps.map((p) => p.price)) : fb; };
+// «от … ₽» у группы: для гаражных ковров — по полосам (товары с длиной), без ковра под бампер и фиксатора
+const from = (g: string, fb: number) => { const all = PRODUCTS.filter((p) => p.group === g); const ps = all.some((p) => p.length) ? all.filter((p) => p.length) : all; return ps.length ? Math.min(...ps.map((p) => p.price)) : fb; };
 export const GROUPS = Object.fromEntries(Object.entries(STATIC_GROUPS).map(([k, g]) => [k, { ...g, ...(CMS?.groups?.[k] ?? {}), from: from(k, g.from) }])) as unknown as typeof STATIC_GROUPS;
 export const byGroup = (g: Product['group']) => PRODUCTS.filter((p) => p.group === g);
 export const productPath = (p: Product) => (p.group === 'antibuksa' ? 'antibuksa/' : `${GROUPS[p.group].slug}/${p.slug}/`);
