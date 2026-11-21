@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [cms-publish]
 permissions:
   contents: read
   pages: write
@@ -21,6 +23,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          STRAPI_URL: ${{ secrets.STRAPI_URL }}
+          PUBLIC_ORDER_API: ${{ vars.PUBLIC_ORDER_API }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

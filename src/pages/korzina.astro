@@ -30,7 +30,8 @@ import { u, COMPANY as K } from '../lib';
           <a class="btn btn-ghost" href={`mailto:${K.email}`} data-mail><Icon name="mail" />Открыть письмо ещё раз</a>
         </div>
       </div>
-      <form class="form cart-form" data-order hidden>
+      <form class="form cart-form" data-order hidden data-api={import.meta.env.PUBLIC_ORDER_API || undefined}>
+        <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <h3><Icon name="clipboard" />Оформление заказа</h3>
         <div class="cart-total"><span>Итого</span><b class="price" data-cart-total>0 ₽</b></div>
         <div class="inp"><label for="f-name">ФИО</label><input id="f-name" name="ФИО" required autocomplete="name"></div>
@@ -77,9 +78,25 @@ import { u, COMPANY as K } from '../lib';
     form.querySelector<HTMLElement>('[data-city]')!.hidden = !other;
     form.querySelector<HTMLElement>('[data-cash]')!.hidden = other;
   });
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault(); if (!form.reportValidity()) return;
     const c = cart.read();
+    const api = form.dataset.api;
+    if (api) {
+      const fd = new FormData(form); const city = fd.get('Город') === 'Казань' ? 'Казань' : String(fd.get('Город доставки') || 'Другой город');
+      const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!; btn.disabled = true;
+      try {
+        const r = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: c.map((i) => ({ slug: i.slug, qty: i.qty })), name: fd.get('ФИО'), phone: fd.get('Телефон'), email: fd.get('E-mail'), city, payment: fd.get('Оплата'), website: fd.get('website') }) });
+        const j = await r.json(); if (!r.ok) throw new Error(j?.error?.message || 'Ошибка');
+        const done = document.querySelector<HTMLElement>('[data-done]')!;
+        done.querySelector('h2')!.textContent = `Заказ ${j.number} принят`;
+        done.querySelector('p')!.textContent = `Сумма ${rub(j.total)}. Менеджер свяжется с вами, чтобы подтвердить заказ и отправить квитанцию для оплаты.` + (fd.get('E-mail') ? ' Копия заказа отправлена на вашу почту.' : '');
+        done.querySelector<HTMLElement>('[data-done-text]')!.hidden = true;
+        done.querySelector<HTMLElement>('[data-copy]')!.hidden = true; done.querySelector<HTMLElement>('[data-mail]')!.hidden = true;
+        cart.write([]); form.hidden = true; list.innerHTML = ''; empty.hidden = true; done.hidden = false; done.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      } catch (err) { btn.disabled = false; alert('Не удалось отправить заказ: ' + (err as Error).message + '. Откроем письмо.'); }
+    }
     const lines = c.map((i) => `${i.title} × ${i.qty} = ${rub(i.price * i.qty)}`).join('\n');
     const f = [...new FormData(form).entries()].filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n');
     const body = `Заказ с сайта\n\n${lines}\nИтого: ${total.textContent}\n\n${f}`;

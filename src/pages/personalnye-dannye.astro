@@ -2,7 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Crumbs from '../components/Crumbs.astro';
 import legal from '../data/legal.json';
+import { CMS } from '../data/products';
+const doc = CMS?.documents?.find((d: any) => d.slug === 'personalnye-dannye');
+const paras: string[] = doc ? doc.body.split(/\n\s*\n/).map((t: string) => t.trim()).filter(Boolean) : null as any;
 ---
 <Layout title="Правила обработки персональных данных — Агатэк">
-<section data-name="Документ"><div class="wrap"><Crumbs items={[['Обработка персональных данных']]} /><article class="doc"><h1>Правила обработки персональных данных</h1>{legal.pd.slice(1).map((t) => <p>{t}</p>)}</article></div></section>
+<section data-name="Документ"><div class="wrap"><Crumbs items={[['Обработка персональных данных']]} /><article class="doc"><h1>Правила обработки персональных данных</h1>{(paras ?? legal.pd.slice(1)).map((t: string) => <p>{t}</p>)}</article></div></section>
 </Layout>

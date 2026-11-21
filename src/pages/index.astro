@@ -7,7 +7,7 @@ import Ways from '../components/Ways.astro';
 import Steps from '../components/Steps.astro';
 import Videos from '../components/Videos.astro';
 import Opt from '../components/Opt.astro';
-import { u, pimg, rub } from '../lib';
+import { u, pimg, rub, COMPANY } from '../lib';
 import { GROUPS, byGroup, PRODUCTS } from '../data/products';
 const anti = PRODUCTS.find((p) => p.group === 'antibuksa')!;
 ---
@@ -16,8 +16,8 @@ const anti = PRODUCTS.find((p) => p.group === 'antibuksa')!;
 <section class="hero" data-name="Первый экран">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <h1>Гаражные ковры <em>от производителя</em></h1>
-      <p class="lead">Защищают пол гаража и собирают стекающие с машины реагенты, воду и грязь. Упор в конце полосы подскажет, где остановиться.</p>
+      <h1>{COMPANY.hero.title} <em>{COMPANY.hero.accent}</em></h1>
+      <p class="lead">{COMPANY.hero.lead}</p>
       <ul class="facts">
         <li><Icon name="tray" />Борт <span class="key">45 мм</span></li>
         <li><Icon name="ruler" />Ширина 500 мм</li>

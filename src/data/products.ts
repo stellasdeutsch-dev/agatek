@@ -5,7 +5,7 @@ export type Product = {
   img: string; gallery: string[]; note?: string; specs: [string, string][]; set?: string[]; text?: string[]; length?: number;
 };
 const GARAGE_SPECS: [string, string][] = [['Ширина', '500 мм'], ['Высота борта', '45 мм'], ['Толщина', '5 мм'], ['В комплекте', '2 полосы и фиксатор']];
-export const PRODUCTS: Product[] = [
+const STATIC_PRODUCTS: Product[] = [
   { slug: '4-2-m', group: 'garazh', title: 'Гаражные ковры, длина 4,2 м (2 полосы)', short: 'Гаражные ковры 4,2 м', sku: 'A.001.01.H', price: 23000, length: 4.2,
     img: 'garazh-kovry', gallery: ['garazh-kovry', 'garazh-kovry-fiksator', 'garazh-mazda', 'garazh-koleso'], note: 'В комплект входит фиксатор гаражных ковров',
     specs: [['Длина', '4,2 м'], ...GARAGE_SPECS], set: ['2 полосы гаражного ковра', 'Фиксатор гаражных ковров'] },
@@ -30,10 +30,17 @@ export const PRODUCTS: Product[] = [
     text: ['Клипсы для крепления автоковров. Возможно установить на ковры любой марки автомобилей.', 'Идеально подходят для штатного крепления ковров на автомобили Opel, Ford, Chevrolet, Volkswagen, Renault, Skoda, Audi, Seat.'] },
   { slug: 'vkrutka', group: 'fiksatory', title: 'Вкрутка', short: 'Вкрутка', sku: 'A.001.05.H', price: 80, img: 'vkrutka', gallery: ['vkrutka', 'krepezh-nabor'], specs: [] },
 ];
-export const GROUPS = {
+const STATIC_GROUPS = {
   garazh: { slug: 'garazhnye-kovry', title: 'Гаражные ковры', note: 'Защита пола от реагентов, воды и грязи', icon: 'garage', img: 'garazh-kovry', from: 23000 },
   antibuksa: { slug: 'antibuksa', title: 'Антибукса', note: 'Лента против пробуксовки в снегу и грязи', icon: 'snow', img: 'antibuksa', from: 3500 },
   fiksatory: { slug: 'fiksatory', title: 'Фиксаторы', note: 'Клипсы и фиксаторы для ковров в салоне', icon: 'clip', img: 'krepezh-nabor', from: 80 },
 } as const;
+
+// Если перед сборкой выполнен scripts/pull-cms.mjs, данные берутся из Strapi (src/data/cms.json).
+const cmsFile = import.meta.glob('./cms.json', { eager: true, import: 'default' }) as Record<string, any>;
+export const CMS = cmsFile['./cms.json'] ?? null;
+export const PRODUCTS: Product[] = CMS?.products?.length ? CMS.products : STATIC_PRODUCTS;
+const from = (g: string, fb: number) => { const ps = PRODUCTS.filter((p) => p.group === g); return ps.length ? Math.min(...ps.map((p) => p.price)) : fb; };
+export const GROUPS = Object.fromEntries(Object.entries(STATIC_GROUPS).map(([k, g]) => [k, { ...g, ...(CMS?.groups?.[k] ?? {}), from: from(k, g.from) }])) as unknown as typeof STATIC_GROUPS;
 export const byGroup = (g: Product['group']) => PRODUCTS.filter((p) => p.group === g);
 export const productPath = (p: Product) => (p.group === 'antibuksa' ? 'antibuksa/' : `${GROUPS[p.group].slug}/${p.slug}/`);

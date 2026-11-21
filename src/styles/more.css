@@ -403,3 +403,5 @@
 .logo-mark { color: var(--acc); }
 .logo-mark svg { width: 30px; height: 30px; }
 .logo:hover .logo-mark { color: var(--acc2); }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
