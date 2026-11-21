@@ -12,11 +12,12 @@ const { p } = Astro.props;
 const g = GROUPS[p.group];
 const url = u(productPath(p));
 const add = JSON.stringify({ slug: p.slug, title: p.short, price: p.price, img: p.img, url });
-const view3d = p.length ? 'mats' : p.group === 'antibuksa' ? 'tape' : '';
 const photoKinds = new Set(['garazh-mazda', 'garazh-koleso', 'antibuksa-sneg-3', 'antibuksa-bagazhnik', 'antibuksa-shipy', 'kover-pod-bamper-chertezh']);
 const more = PRODUCTS.filter((x) => x.slug !== p.slug && (x.group === p.group || (p.group === 'garazh' && x.slug === 'antibuksa'))).slice(0, 3);
+const ld = { '@context': 'https://schema.org', '@type': 'Product', name: p.title, sku: p.sku || undefined, image: new URL(pimg(p.img), 'https://stellasdeutsch-dev.github.io').href, brand: { '@type': 'Brand', name: 'Агатэк' }, offers: { '@type': 'Offer', priceCurrency: 'RUB', price: p.price, url: new URL(url, 'https://stellasdeutsch-dev.github.io').href } };
 const crumbs: [string, string?][] = p.group === 'antibuksa' ? [[p.short]] : [[g.title, g.slug + '/'], [p.short]];
 ---
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />
 <section data-name="Товар">
   <div class="wrap">
     <Crumbs items={crumbs} />
@@ -24,17 +25,15 @@ const crumbs: [string, string?][] = p.group === 'antibuksa' ? [[p.short]] : [[g.
       <div class="gal" data-gallery>
         <div class="ph gal-main">
           <img data-main src={pimg(p.gallery[0])} alt={p.title}>
-          {view3d && <div class="gal-3d s3d" data-3d={view3d} data-len={p.length}><div class="s3d-canvas"></div><span class="s3d-hint"><Icon name="rotate" />Потяните, чтобы повернуть</span></div>}
           <span class="zone"><Icon name={g.icon} />{g.title}</span>
         </div>
         <div class="thumbs">
-          {view3d && <button class="thumb thumb-3d" type="button" aria-current="false" data-view="3d"><Icon name="box3d" /><span>3D</span></button>}
           {p.gallery.map((im, n) => (
             <button class="thumb" type="button" aria-current={String(n === 0)} data-src={pimg(im)} data-cover={photoKinds.has(im) ? '1' : '0'}><img src={pimg(im)} alt={`Фото ${n + 1}`} loading="lazy" class={photoKinds.has(im) ? 'cover' : ''}></button>
           ))}
         </div>
       </div>
-      <div class="buy">
+      <div class="buy" data-buy>
         <h1>{p.title}</h1>
         <div class="buy-meta">
           {p.sku && <span><Icon name="tag" />Артикул {p.sku}</span>}
@@ -62,6 +61,11 @@ const crumbs: [string, string?][] = p.group === 'antibuksa' ? [[p.short]] : [[g.
     </div>
   </div>
 </section>
+
+<div class="sbar" data-sbar hidden>
+  <div class="sbar-t"><b>{p.short}</b><span class="price">{rub(p.price)}</span></div>
+  <button class="btn btn-acc" type="button" data-add={add}><Icon name="cart" />В корзину</button>
+</div>
 
 <section class="sec" data-name="Характеристики">
   <div class="wrap two">

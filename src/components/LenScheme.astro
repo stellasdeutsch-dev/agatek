@@ -1,0 +1,86 @@
+---
+// Схема гаражных ковров без библиотек: вид сверху на две полосы (длина меняется кнопками) и поперечный разрез.
+// Размеры из характеристик: ширина 500 мм, борт 45 мм, толщина 5 мм, длины 4,2 / 5 / 6 м.
+interface Props { len?: number; cutOnly?: boolean }
+const { len = 5, cutOnly } = Astro.props;
+const K = 62; // пикселей на метр по длине
+const TOP = 70, X1 = 150, X2 = 290, W = 56;
+const h = len * K;
+const lab = (n: number) => String(n).replace('.', ',') + ' м';
+---
+<figure class="lsch" data-lsch data-len={len}>
+  {!cutOnly && <svg class="lsch-top" viewBox="0 0 520 520" role="img" aria-label={`Схема: две полосы гаражного ковра длиной ${lab(len)}, ширина 500 мм`} data-big="1">
+    <g class="lsch-wall"><rect x="40" y="34" width="440" height="12" rx="3" /><text x="44" y="26">Стена гаража</text></g>
+    {[X1, X2].map((x) => (
+      <g class="lsch-strip">
+        <rect class="lsch-body" x={x} y={TOP} width={W} height={h} rx="8" data-h />
+        <rect class="lsch-in" x={x + 6} y={TOP + 16} width={W - 12} height={h - 30} rx="4" data-hin />
+        {[0, 1, 2, 3].map((i) => <line class="lsch-rib" x1={x + 14 + i * 9.5} y1={TOP + 22} x2={x + 14 + i * 9.5} y2={TOP + h - 20} data-rib />)}
+        <rect class="lsch-stop" x={x - 2} y={TOP - 4} width={W + 4} height="18" rx="6" />
+        <rect class="lsch-ramp" x={x} y={TOP + h - 4} width={W} height="16" rx="6" data-ramp />
+        <rect class="lsch-tag" x={x + W / 2 - 9} y={TOP + h - 34} width="18" height="7" rx="2" data-tag />
+      </g>
+    ))}
+    <g class="lsch-dim">
+      <line x1="390" y1={TOP} x2="390" y2={TOP + h} data-dim />
+      <line x1="380" y1={TOP} x2="400" y2={TOP} />
+      <line x1="380" y1={TOP + h} x2="400" y2={TOP + h} data-dimend />
+      <g data-dimlab transform={`translate(390 ${TOP + h / 2})`}><rect x="-38" y="-19" width="76" height="38" rx="10" /><text y="7" text-anchor="middle" data-lentxt>{lab(len)}</text></g>
+    </g>
+    <g class="lsch-call">
+      <line x1={X2 + W + 4} y1={TOP + 5} x2="345" y2={TOP + 5} /><circle cx={X2 + W + 2} cy={TOP + 5} r="3.5" />
+      <g transform={`translate(312 ${TOP - 12})`}><rect x="0" y="0" width="0" height="0" /></g>
+    </g>
+    <g class="lsch-note">
+      <g transform={`translate(${X1 - 108} ${TOP + 2})`}><rect width="92" height="30" rx="8" /><text x="46" y="20" text-anchor="middle">Упор</text></g>
+      <line class="lsch-lead" x1={X1 - 16} y1={TOP + 17} x2={X1 - 2} y2={TOP + 9} />
+      <g data-ramplab transform={`translate(${X1 - 108} ${TOP + h - 12})`}><rect width="92" height="30" rx="8" /><text x="46" y="20" text-anchor="middle">Заезд</text></g>
+      <g data-widlab transform={`translate(${X1 - 6} ${TOP + h + 30})`}><line x1="6" y1="0" x2={W + 6} y2="0" /><line x1="6" y1="-6" x2="6" y2="6" /><line x1={W + 6} y1="-6" x2={W + 6} y2="6" /><text x={W / 2 + 6} y="24" text-anchor="middle">500 мм</text></g>
+    </g>
+  </svg>}
+  <figcaption class="lsch-cut">
+    <svg viewBox="0 0 260 120" role="img" aria-label="Поперечный разрез полосы: ширина 500 мм, борт 45 мм, толщина 5 мм" data-big="1">
+      <path class="lsch-prof" d="M20 30 h18 v52 h184 v-52 h18 v66 h-220 z" />
+      <g class="lsch-cdim">
+        <line x1="20" y1="110" x2="240" y2="110" /><line x1="20" y1="104" x2="20" y2="116" /><line x1="240" y1="104" x2="240" y2="116" />
+        <line x1="8" y1="30" x2="8" y2="96" /><line x1="2" y1="30" x2="14" y2="30" /><line x1="2" y1="96" x2="14" y2="96" />
+      </g>
+    </svg>
+    <ul>
+      <li><b class="key">45 мм</b>высота борта</li>
+      <li><b>5 мм</b>толщина</li>
+      <li><b>500 мм</b>ширина полосы</li>
+    </ul>
+  </figcaption>
+</figure>
+<script>
+  // Длина меняется по событию 'len' от кнопок выбора; при «уменьшить движение» — сразу, без анимации.
+  const K = 62, TOP = 70;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('[data-lsch]').forEach((fig) => {
+    if (!fig.querySelector('[data-dim]')) return;
+    let cur = Number(fig.dataset.len);
+    const set = (len: number) => {
+      const h = len * K;
+      fig.querySelectorAll('[data-h]').forEach((e) => e.setAttribute('height', String(h)));
+      fig.querySelectorAll('[data-hin]').forEach((e) => e.setAttribute('height', String(h - 30)));
+      fig.querySelectorAll('[data-rib]').forEach((e) => e.setAttribute('y2', String(TOP + h - 20)));
+      fig.querySelectorAll('[data-ramp]').forEach((e) => e.setAttribute('y', String(TOP + h - 4)));
+      fig.querySelectorAll('[data-tag]').forEach((e) => e.setAttribute('y', String(TOP + h - 34)));
+      fig.querySelector('[data-dim]')!.setAttribute('y2', String(TOP + h));
+      fig.querySelector('[data-dimend]')!.setAttribute('y1', String(TOP + h));
+      fig.querySelector('[data-dimend]')!.setAttribute('y2', String(TOP + h));
+      fig.querySelector('[data-dimlab]')!.setAttribute('transform', `translate(390 ${TOP + h / 2})`);
+      const r = fig.querySelector('[data-ramplab]')!; r.setAttribute('transform', r.getAttribute('transform')!.replace(/ [\d.]+\)$/, ` ${TOP + h - 12})`));
+      const w = fig.querySelector('[data-widlab]')!; w.setAttribute('transform', w.getAttribute('transform')!.replace(/ [\d.]+\)$/, ` ${TOP + h + 30})`));
+    };
+    document.addEventListener('len', (e: any) => {
+      const to = Number(e.detail.len);
+      fig.querySelector('[data-lentxt]')!.textContent = String(to).replace('.', ',') + ' м';
+      if (reduce) { set(to); cur = to; return; }
+      const from = cur, t0 = performance.now(), d = 450;
+      const step = (now: number) => { const k = Math.min(1, (now - t0) / d), e2 = 1 - Math.pow(1 - k, 3); set(from + (to - from) * e2); if (k < 1) requestAnimationFrame(step); else cur = to; };
+      requestAnimationFrame(step);
+    });
+  });
+</script>

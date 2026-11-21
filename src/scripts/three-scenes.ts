@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const C = { rubber: 0x1c1e22, rubber2: 0x2a2d33, floor: 0xe6e3dc, wall: 0xf1efea, tag: 0xd8262b, acc: 0xff5a1f, body: 0x2b3038, glass: 0x1a1e24, rim: 0xc9ccd2 };
+const C = { rubber: 0x1c1e22, rubber2: 0x2a2d33, floor: 0xe6e3dc, wall: 0xf1efea, tag: 0xd8262b, acc: 0x2457e6, body: 0x2b3038, glass: 0x1a1e24, rim: 0xc9ccd2 };
 
 type Label = { el: HTMLElement; at: THREE.Vector3 };
 

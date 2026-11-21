@@ -4,6 +4,7 @@ import Icon from '../../components/Icon.astro';
 import Crumbs from '../../components/Crumbs.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import LenPicker from '../../components/LenPicker.astro';
+import LenScheme from '../../components/LenScheme.astro';
 import Videos from '../../components/Videos.astro';
 import Ways from '../../components/Ways.astro';
 import { byGroup } from '../../data/products';
@@ -24,7 +25,7 @@ import { pimg } from '../../lib';
           <div><b>2</b><span>полосы в комплекте</span></div>
         </div>
       </div>
-      <div class="ghead-3d s3d" data-3d="mats" data-len="5"><div class="s3d-canvas"></div><span class="s3d-hint"><Icon name="rotate" />Потяните, чтобы повернуть</span></div>
+      <div class="ghead-vis"><LenScheme /></div>
     </div>
     <div class="pick-card pick-flat"><LenPicker /></div>
   </div>

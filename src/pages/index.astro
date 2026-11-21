@@ -27,11 +27,10 @@ const anti = PRODUCTS.find((p) => p.group === 'antibuksa')!;
         <a class="btn btn-acc btn-lg" href={u('podbor/')}><Icon name="ruler" />Подобрать длину</a>
         <a class="btn btn-ghost btn-lg" href={u('garazhnye-kovry/')}>Каталог</a>
       </div>
-      <p class="maker"><Icon name="factory" />Работая с нами, вы работаете с производителем</p>
     </div>
-    <figure class="hero-media s3d" data-3d="garage" data-len="5">
-      <span class="hero-tag"><Icon name="box3d" />3D: гаражные ковры <span data-len-text>5 м</span></span>
-      <div class="s3d-canvas"><img class="s3d-poster" src={pimg('garazh-mazda')} alt="Машина стоит на гаражных коврах в гараже"></div>
+    <figure class="hero-media hero-photo">
+      <span class="hero-tag"><Icon name="garage" />Гаражные ковры в гараже</span>
+      <div class="hero-ph"><img src={pimg('garazh-mazda')} alt="Машина стоит на гаражных коврах в гараже" fetchpriority="high"></div>
       <div class="hero-specs">
         <div><span>Борт</span><b class="key">45 мм</b></div>
         <div><span>Длина</span><b>4,2 · 5 · 6 м</b></div>

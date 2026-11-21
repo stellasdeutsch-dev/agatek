@@ -50,8 +50,6 @@ document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((g) => {
   g.querySelectorAll<HTMLButtonElement>('.thumb').forEach((t) => t.addEventListener('click', () => {
     g.querySelectorAll('.thumb').forEach((x) => x.setAttribute('aria-current', 'false'));
     t.setAttribute('aria-current', 'true');
-    if (t.dataset.view === '3d') { g.classList.add('is-3d'); return; }
-    g.classList.remove('is-3d');
     if (main) { main.src = t.dataset.src!; main.classList.toggle('cover', t.dataset.cover === '1'); }
   }));
 });
@@ -74,19 +72,6 @@ document.querySelectorAll<HTMLElement>('[data-len-group]').forEach((g) => {
   });
 });
 
-// 3D: подгружаем three.js только когда сцена попадает в экран
-const scenes = document.querySelectorAll<HTMLElement>('[data-3d]');
-if (scenes.length) {
-  const io = new IntersectionObserver((ents) => {
-    ents.forEach((en) => {
-      if (!en.isIntersecting) return;
-      io.unobserve(en.target);
-      import('./three-scenes').then((m) => m.mount(en.target as HTMLElement)).catch((err) => console.warn('3D', err));
-    });
-  }, { rootMargin: '200px' });
-  scenes.forEach((s) => io.observe(s));
-}
-
 // выбор длины меняет цену, «В корзину» и ссылку
 document.addEventListener('len', (e: any) => {
   const b = e.detail.el as HTMLElement;
@@ -106,3 +91,21 @@ document.querySelectorAll<HTMLFormElement>('form[data-mailform]').forEach((f) =>
   const body = [...new FormData(f).entries()].map(([k, v]) => `${k}: ${v}`).join('\n');
   location.href = `mailto:${f.dataset.to}?subject=${encodeURIComponent(f.dataset.subject || 'Заявка с сайта')}&body=${encodeURIComponent(body)}`;
 }));
+
+// панель «В корзину» на телефоне появляется, когда основной блок покупки ушёл с экрана
+const sbar = document.querySelector<HTMLElement>('[data-sbar]');
+const buy = document.querySelector<HTMLElement>('[data-buy]');
+if (sbar && buy && 'IntersectionObserver' in window) {
+  sbar.hidden = false;
+  new IntersectionObserver(([e]) => sbar.classList.toggle('on', !e.isIntersecting && e.boundingClientRect.top < 0)).observe(buy);
+}
+
+// 3D только на «Подборе длины»: three.js грузится, когда сцена на экране
+const scenes = document.querySelectorAll<HTMLElement>('[data-3d]');
+if (scenes.length && 'IntersectionObserver' in window) {
+  const io = new IntersectionObserver((ents) => ents.forEach((en) => {
+    if (!en.isIntersecting) return; io.unobserve(en.target);
+    import('./three-scenes').then((m) => m.mount(en.target as HTMLElement)).catch(() => en.target.classList.add('s3d-fail'));
+  }), { rootMargin: '200px' });
+  scenes.forEach((s) => io.observe(s));
+}

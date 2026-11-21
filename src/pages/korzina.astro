@@ -19,6 +19,17 @@ import { u, COMPANY as K } from '../lib';
         </div>
         <ul class="cart-items" data-cart-items></ul>
       </div>
+      <div class="done" data-done hidden>
+        <span class="done-ic"><Icon name="check" sw={2.4} /></span>
+        <h2>Заказ сформирован</h2>
+        <p>Мы открыли письмо с заказом на {K.email}. Если письмо не открылось, скопируйте заказ и отправьте его на почту или позвоните.</p>
+        <pre data-done-text></pre>
+        <div class="own-a">
+          <button class="btn btn-acc" type="button" data-copy><Icon name="clipboard" />Скопировать заказ</button>
+          <a class="btn btn-ghost" href={`tel:${K.tel}`}><Icon name="phone" />{K.phone}</a>
+          <a class="btn btn-ghost" href={`mailto:${K.email}`} data-mail><Icon name="mail" />Открыть письмо ещё раз</a>
+        </div>
+      </div>
       <form class="form cart-form" data-order hidden>
         <h3><Icon name="clipboard" />Оформление заказа</h3>
         <div class="cart-total"><span>Итого</span><b class="price" data-cart-total>0 ₽</b></div>
@@ -72,7 +83,16 @@ import { u, COMPANY as K } from '../lib';
     const lines = c.map((i) => `${i.title} × ${i.qty} = ${rub(i.price * i.qty)}`).join('\n');
     const f = [...new FormData(form).entries()].filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n');
     const body = `Заказ с сайта\n\n${lines}\nИтого: ${total.textContent}\n\n${f}`;
-    location.href = `mailto:agatek@bk.ru?subject=${encodeURIComponent('Заказ с сайта')}&body=${encodeURIComponent(body)}`;
+    const href = `mailto:agatek@bk.ru?subject=${encodeURIComponent('Заказ с сайта')}&body=${encodeURIComponent(body)}`;
+    const done = document.querySelector<HTMLElement>('[data-done]')!;
+    done.querySelector('[data-done-text]')!.textContent = body;
+    done.querySelector<HTMLAnchorElement>('[data-mail]')!.href = href;
+    done.querySelector<HTMLButtonElement>('[data-copy]')!.onclick = async (ev) => {
+      const b = ev.currentTarget as HTMLButtonElement;
+      try { await navigator.clipboard.writeText(body); b.lastChild!.textContent = 'Скопировано'; } catch { b.lastChild!.textContent = 'Выделите текст и скопируйте'; }
+    };
+    form.hidden = true; done.hidden = false; done.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    location.href = href;
   });
   draw();
 </script>

@@ -5,10 +5,10 @@
   --ink: #15171A;
   --ink2: #5B616B;
   --ink3: #8B9099;
-  --acc: #FF5A1F;
-  --acc2: #E84A10;
-  --acc-soft: #FFEDE4;
-  --acc-ink: #B23A0A;
+  --acc: #2457E6;
+  --acc2: #1A45C2;
+  --acc-soft: #E8EEFE;
+  --acc-ink: #1A3FA6;
   --line: #E3E5E0;
   --line2: #C9CCC4;
   --ok: #1D9A57;
@@ -246,13 +246,13 @@ h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; line-height: 1
 .about h2 { font-size: 40px; }
 .about p { color: #B5BAC2; font-size: 17px; margin-top: 20px; max-width: 480px; }
 .about .maker { color: #fff; font-weight: 600; margin-top: 28px; }
-.about .maker svg { color: var(--acc); }
+.about .maker svg { color: #7DA0FF; }
 .about .link { margin-top: 32px; color: #fff; }
-.about .link:hover { color: var(--acc); }
+.about .link:hover { color: #7DA0FF; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stat { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; min-height: 164px; padding: 24px; border-radius: var(--r-m); background: var(--dark2); transition: background-color .25s; }
 .stat:hover { background: #2D3137; }
-.stat b { font-size: 60px; font-weight: 800; letter-spacing: -0.045em; line-height: 1; color: var(--acc); font-variant-numeric: tabular-nums; }
+.stat b { font-size: 60px; font-weight: 800; letter-spacing: -0.045em; line-height: 1; color: #7DA0FF; font-variant-numeric: tabular-nums; }
 .stat span { font-size: 15px; color: #B5BAC2; font-weight: 600; }
 
 /* ---------- Как заказать ---------- */
@@ -332,13 +332,13 @@ h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; line-height: 1
 .ftr h3 { font-size: 16px; margin-bottom: 18px; letter-spacing: 0; }
 .ftr ul { display: grid; gap: 10px; }
 .ftr li a { color: #C3C7CE; font-size: 15px; transition: color .2s; }
-.ftr li a:hover { color: var(--acc); }
+.ftr li a:hover { color: #7DA0FF; }
 .ftr-c li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: #C3C7CE; }
 .ftr-c svg { width: 20px; height: 20px; color: #fff; margin-top: 1px; }
 .ftr-c b { display: block; color: #fff; font-weight: 700; }
 .ftr-c a { display: block; color: #fff !important; font-weight: 700; white-space: nowrap; }
 .ftr-c .inl { display: inline; }
-.ftr-c a:hover { color: var(--acc) !important; }
+.ftr-c a:hover { color: #7DA0FF !important; }
 .ftr-bot { margin-top: 56px; padding-top: 24px; border-top: 1px solid #2A2E34; display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-size: 13px; color: #8E949C; }
 .ftr-bot nav { display: flex; gap: 24px; flex-wrap: wrap; }
 .ftr-bot a { transition: color .2s; }

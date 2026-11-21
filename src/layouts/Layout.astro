@@ -22,6 +22,14 @@ const nav = [
 <title>{title}</title>
 <meta name="description" content={description}>
 <meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Агатэк">
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:image" content={new URL(u('img/p/garazh-mazda.webp'), 'https://stellasdeutsch-dev.github.io').href}>
+<meta property="og:locale" content="ru_RU">
+<meta name="theme-color" content="#2457E6">
+<link rel="canonical" href={new URL(Astro.url.pathname, 'https://stellasdeutsch-dev.github.io').href}>
 <link rel="icon" href={u('favicon.svg')} type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,7 +95,7 @@ const nav = [
     <div class="ftr-grid">
       <div>
         <a class="logo" href={u('')}><span class="logo-mark"><Icon name="mat" sw={2} /></span><span class="logo-t"><b>Агатэк</b><span>автомобильные коврики</span></span></a>
-        <p class="ftr-about">Работая с нами, вы работаете с производителем</p>
+        <p class="ftr-about">Гаражные ковры, антибукса и фиксаторы. Казань, с 1992 года.</p>
         <div class="soc">
           <a href="https://vk.com/agatekavto" aria-label="ВКонтакте"><Icon name="vk" /></a>
           <a href={K.youtube} aria-label="YouTube"><Icon name="youtube" /></a>
