@@ -5,7 +5,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 const API = process.env.STRAPI_URL?.replace(/\/$/, '');
 const OUT = new URL('../src/data/cms.json', import.meta.url);
-if (!API) { console.log('pull-cms: STRAPI_URL не задан — берём данные из products.ts'); process.exit(0); }
+if (!API) {
+  // старый снимок не должен попадать в сборку без Strapi
+  fs.rmSync(OUT, { force: true }); fs.rmSync(new URL('../public/img/cms/', import.meta.url), { recursive: true, force: true });
+  console.log('pull-cms: STRAPI_URL не задан — берём данные из products.ts'); process.exit(0);
+}
 const get = async (p) => { const r = await fetch(`${API}/api/${p}`); if (!r.ok) throw new Error(`${p}: ${r.status}`); return (await r.json()).data; };
 const imgDir = new URL('../public/img/cms/', import.meta.url); fs.rmSync(imgDir, { recursive: true, force: true }); fs.mkdirSync(imgDir, { recursive: true });
 const saved = new Map();
