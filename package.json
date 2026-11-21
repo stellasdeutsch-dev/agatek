@@ -1,0 +1,16 @@
+{
+  "name": "agatek-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data": "python3 scripts/build-data.py",
+    "dev": "astro dev --port 4390",
+    "build": "astro build",
+    "preview": "astro preview --port 4391"
+  },
+  "dependencies": {
+    "astro": "^5.14.0",
+    "three": "^0.180.0"
+  }
+}

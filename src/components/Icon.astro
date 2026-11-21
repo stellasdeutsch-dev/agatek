@@ -1,0 +1,8 @@
+---
+// Свои иконки 24×24, контур. data-icon остаётся для имён слоёв в Figma.
+import icons from '../data/icons.json';
+interface Props { name: string; sw?: number | string; class?: string }
+const { name, sw = 1.8, class: cls } = Astro.props;
+const body = (icons as Record<string, string>)[name] ?? '';
+---
+<svg data-icon={name} class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={sw} stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={body} />

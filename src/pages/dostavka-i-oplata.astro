@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Crumbs from '../components/Crumbs.astro';
+import Ways from '../components/Ways.astro';
+import Steps from '../components/Steps.astro';
+---
+<Layout title="Доставка и оплата — Агатэк" current="delivery">
+<section data-name="Заголовок">
+  <div class="wrap">
+    <Crumbs items={[['Доставка и оплата']]} />
+    <div class="ihead"><h1>Доставка и оплата</h1><p class="lead">Доставка в регионы транспортной компанией «Энергия» или СДЭК. Оплата услуг транспортной компании при получении заказа.</p></div>
+  </div>
+</section>
+<section class="sec sec-tight" data-name="Способы"><div class="wrap"><Ways /></div></section>
+<section class="sec" data-name="Как оформить заказ"><div class="wrap"><div class="sh"><h2>Как оформить заказ</h2></div><Steps /></div></section>
+<section class="sec" data-name="Оплата по QR-коду">
+  <div class="wrap">
+    <div class="box">
+      <h2>Оплата квитанции через мобильный банк</h2>
+      <ol class="qr-steps">
+        <li><span class="n">1</span>Откройте квитанцию</li>
+        <li><span class="n">2</span>Откройте приложение «Мобильный банк» на смартфоне</li>
+        <li><span class="n">3</span>Выберите оплату по QR-коду и отсканируйте его с квитанции</li>
+        <li><span class="n">4</span>Введите данные плательщика, сумму и проведите платёж</li>
+        <li><span class="n">5</span>Деньги зачисляются на расчётный счёт в течение суток</li>
+      </ol>
+      <p class="txt-note"><Icon name="info" />После обработки заказа, в зависимости от вида оплаты, вам будет выслана ссылка на страницу оплаты картой или квитанция на почту.</p>
+    </div>
+  </div>
+</section>
+</Layout>

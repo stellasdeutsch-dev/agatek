@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Crumbs from '../components/Crumbs.astro';
+import LenPicker from '../components/LenPicker.astro';
+import { COMPANY as K } from '../lib';
+---
+<Layout title="Подбор длины гаражных ковров — Агатэк" current="catalog">
+<section data-name="Подбор длины">
+  <div class="wrap">
+    <Crumbs items={[['Гаражные ковры', 'garazhnye-kovry/'], ['Подбор длины']]} />
+    <div class="pod">
+      <div class="pod-3d s3d" data-3d="garage" data-len="5"><div class="s3d-canvas"></div><span class="hero-tag"><Icon name="box3d" />Гаражные ковры <span data-len-text>5 м</span></span></div>
+      <div class="pod-b">
+        <h1>Подбор длины</h1>
+        <p class="lead">Выберите длину полос: сцена покажет, как ковры лягут в гараже. Ширина каждой полосы 500 мм, борт 45 мм.</p>
+        <LenPicker compact />
+      </div>
+    </div>
+  </div>
+</section>
+<section class="sec" data-name="Своя длина">
+  <div class="wrap">
+    <div class="own">
+      <span class="own-ic"><Icon name="ruler" /></span>
+      <div><h2>Нужна другая длина?</h2><p>Возможно изготовление гаражных ковров любой длины. Позвоните или напишите, укажите нужную длину и город.</p></div>
+      <div class="own-a"><a class="btn btn-acc btn-lg" href={`tel:${K.tel}`}><Icon name="phone" />{K.phone}</a><a class="btn btn-ghost btn-lg" href={`mailto:${K.email}?subject=${encodeURIComponent('Гаражные ковры нестандартной длины')}`}><Icon name="mail" />{K.email}</a></div>
+    </div>
+  </div>
+</section>
+</Layout>

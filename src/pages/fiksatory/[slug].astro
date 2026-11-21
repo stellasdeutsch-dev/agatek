@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductView from '../../components/ProductView.astro';
+import { byGroup } from '../../data/products';
+export function getStaticPaths() { return byGroup('fiksatory').map((p) => ({ params: { slug: p.slug }, props: { p } })); }
+const { p } = Astro.props;
+---
+<Layout title={`${p.title} — Агатэк`} current="catalog"><ProductView p={p} /></Layout>

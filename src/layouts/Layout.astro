@@ -1,0 +1,131 @@
+---
+import '../styles/site.css';
+import '../styles/more.css';
+import Icon from '../components/Icon.astro';
+import { u, pimg, COMPANY as K } from '../lib';
+import { GROUPS } from '../data/products';
+const CATS = Object.values(GROUPS);
+interface Props { title: string; description?: string; current?: string }
+const { title, description = 'Агатэк — гаражные ковры, антибукса и фиксаторы от производителя. Казань, с 1992 года. Доставка по России.', current = '' } = Astro.props;
+const nav = [
+  { href: 'opt/', t: 'Оптом и дилерам', k: 'opt' },
+  { href: 'o-proizvodstve/', t: 'О производстве', k: 'about' },
+  { href: 'dostavka-i-oplata/', t: 'Доставка и оплата', k: 'delivery' },
+  { href: 'kontakty/', t: 'Контакты', k: 'contacts' },
+];
+---
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta name="robots" content="noindex">
+<link rel="icon" href={u('favicon.svg')} type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script is:inline define:vars={{ base: u('') }}>window.__BASE = base;</script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="hdr" data-name="Шапка">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="topbar-l"><span><Icon name="factory" />Производитель с 1992 года, Казань</span></div>
+      <div class="topbar-r">
+        <span><Icon name="clock" />{K.hours}</span>
+        <a href={`tel:${K.tel}`}><Icon name="phone" />{K.phone}</a>
+        <a href={`tel:${K.telOpt}`}><Icon name="headset" />Опт: {K.phoneOpt}</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap hdr-row">
+    <a class="logo" href={u('')} aria-label="Агатэк, на главную">
+      <span class="logo-mark"><Icon name="mat" sw={2} /></span>
+      <span class="logo-t"><b>Агатэк</b><span>автомобильные коврики</span></span>
+    </a>
+    <nav class="nav" aria-label="Основное меню">
+      <div class="nav-dd">
+        <a href={u('garazhnye-kovry/')} aria-current={current === 'catalog' ? 'page' : undefined}>Каталог<Icon name="chevron" /></a>
+        <div class="dd">
+          {CATS.map((c) => (
+            <a href={u(c.slug + '/')}><img src={pimg(c.img)} alt="" loading="lazy"><span><b>{c.title}</b><small>{c.note}</small></span></a>
+          ))}
+          <a href={u('podbor/')}><span class="dd-ic"><Icon name="ruler" /></span><span><b>Подбор длины ковра</b><small>4,2, 5, 6 м или своя длина</small></span></a>
+        </div>
+      </div>
+      {nav.map((n) => <a href={u(n.href)} aria-current={current === n.k ? 'page' : undefined}>{n.t}</a>)}
+    </nav>
+    <div class="hdr-tools">
+      <a class="ib hdr-phone" href={`tel:${K.tel}`} aria-label="Позвонить"><Icon name="phone" /></a>
+      <a class="hdr-cart" href={u('korzina/')} aria-label="Корзина"><Icon name="cart" /><em>Корзина</em><i class="cart-n" data-cart-count hidden>0</i></a>
+      <button class="ib hdr-menu" type="button" aria-label="Меню" aria-expanded="false" data-menu-btn><Icon name="menu" /></button>
+    </div>
+  </div>
+  <div class="mnav" data-menu hidden>
+    <div class="wrap">
+      
+      <div class="mnav-grid">
+        {CATS.map((c) => <a href={u(c.slug + '/')}><Icon name={c.icon} />{c.title}</a>)}
+        <a href={u('podbor/')}><Icon name="ruler" />Подбор длины ковра</a>
+        {nav.map((n) => <a href={u(n.href)}><Icon name={n.k === 'opt' ? 'building' : n.k === 'about' ? 'factory' : n.k === 'delivery' ? 'truck' : 'pin'} />{n.t}</a>)}
+      </div>
+      <div class="mnav-c">
+        <a href={`tel:${K.tel}`}><Icon name="phone" /><span><b>{K.phone}</b>{K.hours}</span></a>
+        <a href={`tel:${K.telOpt}`}><Icon name="headset" /><span><b>{K.phoneOpt}</b>Оптовый отдел</span></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main"><slot /></main>
+
+<footer class="ftr" data-name="Подвал">
+  <div class="wrap">
+    <div class="ftr-grid">
+      <div>
+        <a class="logo" href={u('')}><span class="logo-mark"><Icon name="mat" sw={2} /></span><span class="logo-t"><b>Агатэк</b><span>автомобильные коврики</span></span></a>
+        <p class="ftr-about">Работая с нами, вы работаете с производителем</p>
+        <div class="soc">
+          <a href="https://vk.com/agatekavto" aria-label="ВКонтакте"><Icon name="vk" /></a>
+          <a href={K.youtube} aria-label="YouTube"><Icon name="youtube" /></a>
+          <a href="https://www.instagram.com/agatek_avto_kovriki/" aria-label="Instagram"><Icon name="instagram" /></a>
+        </div>
+      </div>
+      <div>
+        <h3>Каталог</h3>
+        <ul>{CATS.map((c) => <li><a href={u(c.slug + '/')}>{c.title}</a></li>)}</ul>
+      </div>
+      <div>
+        <h3>Покупателям</h3>
+        <ul>
+          <li><a href={u('podbor/')}>Подбор длины ковра</a></li>
+          <li><a href={u('dostavka-i-oplata/')}>Доставка и оплата</a></li>
+          <li><a href={u('opt/')}>Оптом и дилерам</a></li>
+          <li><a href={u('o-proizvodstve/')}>О производстве</a></li>
+          <li><a href={u('kontakty/')}>Контакты и реквизиты</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Контакты</h3>
+        <ul class="ftr-c">
+          <li><Icon name="phone" /><div><a href={`tel:${K.tel}`}>{K.phone}</a>{K.hours}</div></li>
+          <li><Icon name="headset" /><div><a href={`tel:${K.telOpt}`}>{K.phoneOpt}</a>Оптовый отдел</div></li>
+          <li><Icon name="mail" /><div><a href={`mailto:${K.email}`}>{K.email}</a></div></li>
+          <li><Icon name="building" /><div><b>Москва</b>1-й Нагатинский проезд,&nbsp;12<a href={`tel:${K.telMsk}`}>{K.phoneMsk}</a></div></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ftr-bot">
+      <span>{K.legal}</span>
+      <nav><a href={u('oferta/')}>Договор оферты</a><a href={u('personalnye-dannye/')}>Обработка персональных данных</a><span>© Агатэк, 1992–2026</span></nav>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" data-toast hidden><Icon name="check" sw={2.4} /><span data-toast-t>Добавлено в корзину</span><a href={u('korzina/')}>Перейти</a></div>
+<script>import '../scripts/site.ts';</script>
+</body>
+</html>

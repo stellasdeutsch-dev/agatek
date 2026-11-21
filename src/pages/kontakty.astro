@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { COMPANY as K } from '../lib';
+const R: [string, string][] = [
+  ['Полное наименование', 'Индивидуальный предприниматель Накипов Наиль Фарукович'],
+  ['Краткое наименование', 'ИП Накипов Н. Ф.'],
+  ['ОГРНИП / ИНН', '317169000131545 / 165900124200'],
+  ['Адрес местонахождения', 'РТ, г. Казань, Ботаническая, д. 11, кв. 59'],
+  ['Почтовый адрес', '420012, г. Казань, ул. Чехова, д. 8/2, кв. 67'],
+  ['Расчётный счёт', '40802810662000020545'],
+  ['Корреспондентский счёт / БИК', '30101810600000000603 / 049205603'],
+  ['Банк', 'ПАО «Сбербанк России», доп. офис 8610/077'],
+];
+---
+<Layout title="Контакты и реквизиты — Агатэк" current="contacts">
+<section data-name="Заголовок">
+  <div class="wrap">
+    <Crumbs items={[['Контакты']]} />
+    <div class="ihead"><h1>Контакты</h1></div>
+    <div class="cont">
+      <a class="cc" href={`tel:${K.tel}`}><span class="cc-ic"><Icon name="phone" /></span><span><small>Интернет-магазин</small><b>{K.phone}</b>{K.hours}</span></a>
+      <a class="cc" href={`tel:${K.telOpt}`}><span class="cc-ic"><Icon name="headset" /></span><span><small>Оптовый отдел</small><b>{K.phoneOpt}</b>Казань</span></a>
+      <a class="cc" href={`mailto:${K.email}`}><span class="cc-ic"><Icon name="mail" /></span><span><small>Почта</small><b>{K.email}</b>Заказы и оптовый прайс</span></a>
+      <div class="cc"><span class="cc-ic"><Icon name="building" /></span><span><small>Представительство в Москве</small><b>{K.phoneMsk}</b>1-й Нагатинский проезд, 12 · <a href={`mailto:${K.emailMsk}`}>{K.emailMsk}</a></span></div>
+    </div>
+  </div>
+</section>
+<section class="sec" data-name="Реквизиты">
+  <div class="wrap two">
+    <div class="box"><h2>Реквизиты</h2><dl class="specs">{R.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>
+    <div class="box">
+      <h2>Мы в соцсетях</h2>
+      <ul class="fits soc-list">
+        <li><span class="wi"><Icon name="vk" /></span><a href="https://vk.com/agatekavto">vk.com/agatekavto</a></li>
+        <li><span class="wi"><Icon name="instagram" /></span><a href="https://www.instagram.com/agatek_avto_kovriki/">@agatek_avto_kovriki</a></li>
+        <li><span class="wi"><Icon name="youtube" /></span><a href={K.youtube}>Агатэк Коврики</a></li>
+      </ul>
+      <form class="form form-in" data-mailform data-to={K.email} data-subject="Письмо с сайта">
+        <h3><Icon name="mail" />Написать письмо</h3>
+        <div class="inp"><label for="c-name">Ваше имя</label><input id="c-name" name="Имя" required></div>
+        <div class="inp"><label for="c-contact">Телефон или почта</label><input id="c-contact" name="Контакты" required></div>
+        <div class="inp"><label for="c-msg">Сообщение</label><textarea id="c-msg" name="Сообщение" rows="4"></textarea></div>
+        <button class="btn btn-acc btn-lg" type="submit"><Icon name="mail" />Отправить</button>
+        <small>Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</small>
+      </form>
+    </div>
+  </div>
+</section>
+</Layout>

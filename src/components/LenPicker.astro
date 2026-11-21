@@ -1,0 +1,29 @@
+---
+// Выбор длины гаражных ковров: кнопки 4,2 / 5 / 6 м, цена и «В корзину» меняются вместе с 3D-сценой.
+import Icon from './Icon.astro';
+import { u, rub, COMPANY as K } from '../lib';
+import { byGroup, productPath } from '../data/products';
+interface Props { start?: string; compact?: boolean; links?: boolean }
+const { start = '5-m', compact, links } = Astro.props;
+const L = byGroup('garazh').filter((p) => p.length);
+const cur = L.find((p) => p.slug === start) ?? L[1];
+const add = (p: typeof cur) => JSON.stringify({ slug: p.slug, title: p.short, price: p.price, img: p.img, url: u(productPath(p)) });
+---
+<div class:list={['lenp', { 'lenp-c': compact }]} data-lenp>
+  <div class="lenp-btns" role="group" aria-label="Длина гаражных ковров" data-len-group={links ? undefined : ''}>
+    {links ? L.map((p) => (
+      <a class="lenb" href={u(productPath(p))} aria-pressed={String(p.slug === cur.slug)} aria-current={p.slug === cur.slug ? 'page' : undefined}><b>{String(p.length).replace('.', ',')}<small>м</small></b><span>{rub(p.price)}</span></a>
+    )) : L.map((p) => (
+      <button type="button" class="lenb" data-len={p.length} data-slug={p.slug} data-price={rub(p.price)} data-add-json={add(p)} data-url={u(productPath(p))} aria-pressed={String(p.slug === cur.slug)}>
+        <b>{String(p.length).replace('.', ',')}<small>м</small></b><span>{rub(p.price)}</span>
+      </button>
+    ))}
+    <a class="lenb lenb-own" href={`tel:${K.tel}`}><b><Icon name="ruler" /></b><span>Своя длина</span></a>
+  </div>
+  <div class="lenp-buy">
+    <div class="lenp-price"><span>2 полосы и фиксатор</span><b class="price" data-len-price>{rub(cur.price)}</b></div>
+    <button class="btn btn-acc btn-lg" type="button" data-add={add(cur)} data-len-add><Icon name="cart" />В корзину</button>
+    <a class="btn btn-ghost btn-lg" href={u(productPath(cur))} data-len-link>Подробнее</a>
+  </div>
+  <p class="lenp-note"><Icon name="info" />Возможно изготовление любой длины: <a href={`tel:${K.tel}`}>{K.phone}</a></p>
+</div>

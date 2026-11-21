@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+import { pimg, COMPANY as K } from '../lib';
+interface Props { only?: 'garazh' | 'antibuksa' }
+const { only } = Astro.props;
+const V = [
+  { k: 'garazh', id: K.video.garazh, img: 'garazh-video', t: 'Гаражные ковры: эксплуатация и чистка' },
+  { k: 'antibuksa', id: K.video.antibuksa, img: 'antibuksa-video', t: 'Антибукса в снегу', pos: '75% 50%' },
+  { k: 'garazh', img: 'garazh-mazda', t: 'Гаражные ковры в гараже' },
+].filter((v) => !only || v.k === only);
+---
+<div class:list={['photos', { 'photos-2': V.length === 2 }]}>
+  {V.map((v) => v.id ? (
+    <a class="photo" href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener">
+      <img src={pimg(v.img)} alt={v.t} loading="lazy" style={v.pos ? `object-position:${v.pos}` : undefined}>
+      <span class="play"><Icon name="play" /></span>
+      <figcaption><span><Icon name="youtube" />{v.t}</span></figcaption>
+    </a>
+  ) : (
+    <figure class="photo"><img src={pimg(v.img)} alt={v.t} loading="lazy"><figcaption><span><Icon name="camera" />{v.t}</span></figcaption></figure>
+  ))}
+</div>

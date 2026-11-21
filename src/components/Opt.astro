@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro';
+import { pimg, COMPANY as K } from '../lib';
+interface Props { full?: boolean }
+const { full } = Astro.props;
+---
+<div class="opt">
+  <div class="opt-info">
+    <h2>{full ? 'Как получить оптовый прайс' : 'Оптом и дилерам'}</h2>
+    <p>Для получения оптового прайс-листа напишите нам на почту <a class="inl" href={`mailto:${K.email}`}>{K.email}</a> с указанием вашего города, контактной информации и планируемого объёма закупаемой продукции.</p>
+    <ul class="opt-list">
+      <li><span class="wi"><Icon name="headset" /></span><div><b>Оптовый отдел</b><span><a href={`tel:${K.telOpt}`}>{K.phoneOpt}</a></span><span class="nw">{K.hours}</span></div></li>
+      <li><span class="wi"><Icon name="building" /></span><div><b>Представительство в Москве</b><span>Москва, 1-й Нагатинский проезд,&nbsp;12</span><span class="opt-links"><a href={`tel:${K.telMsk}`}>{K.phoneMsk}</a><a href={`mailto:${K.emailMsk}`}>{K.emailMsk}</a></span></div></li>
+    </ul>
+    <div class="ph opt-pic"><img src={pimg('garazh-kovry')} alt="Гаражные ковры" loading="lazy"></div>
+  </div>
+  <form class="form" data-mailform data-to={K.email} data-subject="Запрос оптового прайс-листа">
+    <h3><Icon name="doc" />Оптовый прайс-лист</h3>
+    <div class="inp"><label for="o-city">Город</label><input id="o-city" name="Город" placeholder="Например, Казань" required></div>
+    <div class="inp"><label for="o-contact">Телефон или почта</label><input id="o-contact" name="Контакты" placeholder="+7 900 000-00-00" required></div>
+    <div class="inp"><label for="o-vol">Планируемый объём закупки</label><input id="o-vol" name="Объём" placeholder="Например, 20 комплектов в месяц"></div>
+    <button class="btn btn-acc btn-lg" type="submit"><Icon name="mail" />Запросить прайс-лист</button>
+    <small>Откроется письмо на {K.email} с заполненными полями. Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</small>
+  </form>
+</div>

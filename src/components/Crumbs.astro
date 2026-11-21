@@ -1,0 +1,10 @@
+---
+import Icon from './Icon.astro';
+import { u } from '../lib';
+interface Props { items: [string, string?][] }
+const { items } = Astro.props;
+---
+<nav class="crumbs" aria-label="Навигация">
+  <a href={u('')}><Icon name="home" />Главная</a>
+  {items.map(([t, h]) => (<Fragment><i>/</i>{h ? <a href={u(h)}>{t}</a> : <b>{t}</b>}</Fragment>))}
+</nav>

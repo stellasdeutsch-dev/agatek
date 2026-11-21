@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+const S = [
+  { i: 'cart', t: 'Добавьте в корзину', d: 'Выберите длину гаражных ковров, антибуксу или фиксаторы.' },
+  { i: 'clipboard', t: 'Оформите заказ', d: 'ФИО, телефон, почта и способ оплаты. Казань или другой город.' },
+  { i: 'package', t: 'Получите', d: 'Самовывоз в Казани или СДЭК и «Энергия» по России.' },
+];
+---
+<div class="steps">
+  {S.map((s, n) => (
+    <Fragment>
+      {n > 0 && <div class="step-arrow"><Icon name="arrow" /></div>}
+      <div class="step">
+        <div class="step-top"><span class="step-ic"><Icon name={s.i} /></span><span class="step-n">{n + 1}</span></div>
+        <h3>{s.t}</h3>
+        <p>{s.d}</p>
+      </div>
+    </Fragment>
+  ))}
+</div>

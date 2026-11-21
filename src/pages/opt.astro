@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Crumbs from '../components/Crumbs.astro';
+import Opt from '../components/Opt.astro';
+import { u, pimg, rub } from '../lib';
+import { GROUPS } from '../data/products';
+---
+<Layout title="Оптом и дилерам — Агатэк" current="opt">
+<section data-name="Заголовок">
+  <div class="wrap">
+    <Crumbs items={[['Оптом и дилерам']]} />
+    <div class="ihead"><h1>Оптом и дилерам</h1><p class="lead">Работая с нами, вы работаете с производителем. Эксклюзивным правом на производство и реализацию гаражных ковров на всей территории России обладают холдинг «Агатэк» и его партнёры.</p></div>
+  </div>
+</section>
+<section class="sec sec-tight" data-name="Что поставляем">
+  <div class="wrap">
+    <div class="cats cats-3">
+      {Object.values(GROUPS).map((g) => (
+        <a class="cat" href={u(g.slug + '/')}><div class="ph"><img src={pimg(g.img)} alt={g.title} loading="lazy"></div><div class="cat-b"><h3>{g.title}</h3><p>{g.note}</p><span class="cat-meta"><Icon name={g.icon} />розница от <span class="price">{rub(g.from)}</span></span></div><span class="go"><Icon name="arrow" /></span></a>
+      ))}
+    </div>
+  </div>
+</section>
+<section class="sec" data-name="Запрос прайса"><div class="wrap"><Opt full /></div></section>
+</Layout>

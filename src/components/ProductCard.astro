@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import { u, pimg, rub } from '../lib';
+import { type Product, productPath, GROUPS } from '../data/products';
+interface Props { p: Product }
+const { p } = Astro.props;
+const url = u(productPath(p));
+const g = GROUPS[p.group];
+const add = JSON.stringify({ slug: p.slug, title: p.short, price: p.price, img: p.img, url });
+---
+<article class="pc">
+  <a class="ph" href={url}><img src={pimg(p.img)} alt={p.short} loading="lazy"><span class="zone"><Icon name={g.icon} />{g.title}</span></a>
+  <div class="pc-b">
+    <a class="pc-t" href={url}>{p.short}</a>
+    {p.note ? <p class="pc-s">{p.note}</p> : p.specs[0] ? <p class="pc-s">{p.specs[0][0]}: {p.specs[0][1]}</p> : null}
+    {p.sku && <span class="sku"><Icon name="tag" />{p.sku}</span>}
+    <div class="pc-f"><span class="price">{rub(p.price)}</span><button class="ib ib-acc" type="button" aria-label={`В корзину: ${p.short}`} data-add={add}><Icon name="cart" /></button></div>
+  </div>
+</article>

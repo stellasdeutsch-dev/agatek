@@ -1,0 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductView from '../components/ProductView.astro';
+import { PRODUCTS } from '../data/products';
+const p = PRODUCTS.find((x) => x.group === 'antibuksa')!;
+---
+<Layout title="Антибукса — антипробуксовочная резиновая лента — Агатэк" current="catalog"><ProductView p={p} /></Layout>

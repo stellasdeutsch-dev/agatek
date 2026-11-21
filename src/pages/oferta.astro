@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Crumbs from '../components/Crumbs.astro';
+import legal from '../data/legal.json';
+const P = legal.oferta.slice(1);
+---
+<Layout title="Договор оферты — Агатэк">
+<section data-name="Документ"><div class="wrap"><Crumbs items={[['Договор оферты']]} /><article class="doc"><h1>Договор оферты</h1>{P.map((t) => /^\d+\.\s/.test(t) && t.length < 80 ? <h2>{t}</h2> : <p>{t}</p>)}</article></div></section>
+</Layout>

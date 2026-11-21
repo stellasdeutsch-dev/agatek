@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Crumbs from '../components/Crumbs.astro';
+import Videos from '../components/Videos.astro';
+import { pimg } from '../lib';
+---
+<Layout title="О производстве — Агатэк" current="about">
+<section data-name="Заголовок">
+  <div class="wrap">
+    <Crumbs items={[['О производстве']]} />
+    <div class="about about-page">
+      <div>
+        <h1>Производитель с 1992 года</h1>
+        <p>Группа компаний «Агатэк» создана в 1992 году и является одним из крупнейших производителей автомобильных ковров и аксессуаров из резины и композитных материалов (полиуретан).</p>
+        <p class="maker"><Icon name="pin" />Казань · представительство в Москве</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>1992</b><span>год основания</span></div>
+        <div class="stat"><b>2</b><span>города: Казань и Москва</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="sec" data-name="Гаражные ковры">
+  <div class="wrap">
+    <div class="story">
+      <img src={pimg('garazh-pustoy')} alt="Гаражные ковры в гараже" loading="lazy">
+      <div>
+        <h2>Своя разработка</h2>
+        <p>Гаражные ковры — запатентованный продукт, разработанный, освоенный и выпускаемый нашей компанией. Он относится к аксессуарам, необходимым в повседневной жизни автомобилиста.</p>
+        <p>Специалисты «Агатэк» придумали их для владельцев, которые пользуются гаражом круглый год: с колёс и арок в гараж попадают грязь, песок, снег и соль с дорог.</p>
+        <ul class="facts"><li><Icon name="doc" />Запатентованный продукт</li><li><Icon name="factory" />Производство в Казани</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="sec" data-name="Видео"><div class="wrap"><div class="sh"><h2>Агатэк в деле</h2></div><Videos /></div></section>
+</Layout>

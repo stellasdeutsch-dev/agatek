@@ -1,0 +1,168 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ProductCard from '../components/ProductCard.astro';
+import LenPicker from '../components/LenPicker.astro';
+import Ways from '../components/Ways.astro';
+import Steps from '../components/Steps.astro';
+import Videos from '../components/Videos.astro';
+import Opt from '../components/Opt.astro';
+import { u, pimg, rub } from '../lib';
+import { GROUPS, byGroup, PRODUCTS } from '../data/products';
+const anti = PRODUCTS.find((p) => p.group === 'antibuksa')!;
+---
+<Layout title="Агатэк — гаражные ковры, антибукса и фиксаторы от производителя">
+
+<section class="hero" data-name="Первый экран">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>Гаражные ковры <em>от производителя</em></h1>
+      <p class="lead">Защищают пол гаража и собирают стекающие с машины реагенты, воду и грязь. Упор в конце полосы подскажет, где остановиться.</p>
+      <ul class="facts">
+        <li><Icon name="tray" />Борт <span class="key">45 мм</span></li>
+        <li><Icon name="ruler" />Ширина 500 мм</li>
+        <li><Icon name="layers" />Толщина 5 мм</li>
+      </ul>
+      <div class="hero-cta">
+        <a class="btn btn-acc btn-lg" href={u('podbor/')}><Icon name="ruler" />Подобрать длину</a>
+        <a class="btn btn-ghost btn-lg" href={u('garazhnye-kovry/')}>Каталог</a>
+      </div>
+      <p class="maker"><Icon name="factory" />Работая с нами, вы работаете с производителем</p>
+    </div>
+    <figure class="hero-media s3d" data-3d="garage" data-len="5">
+      <span class="hero-tag"><Icon name="box3d" />3D: гаражные ковры <span data-len-text>5 м</span></span>
+      <div class="s3d-canvas"><img class="s3d-poster" src={pimg('garazh-mazda')} alt="Машина стоит на гаражных коврах в гараже"></div>
+      <div class="hero-specs">
+        <div><span>Борт</span><b class="key">45 мм</b></div>
+        <div><span>Длина</span><b>4,2 · 5 · 6 м</b></div>
+        <div><span>Цена</span><b class="price">от {rub(GROUPS.garazh.from)}</b></div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section class="pick" id="pick" data-name="Подбор длины">
+  <div class="wrap">
+    <div class="pick-card">
+      <div class="pick-head">
+        <h2>Подбор длины</h2>
+        <p class="pick-help"><Icon name="garage" />В комплект входят 2 полосы и фиксатор</p>
+      </div>
+      <LenPicker />
+    </div>
+  </div>
+</section>
+
+<section class="sec" data-name="Каталог">
+  <div class="wrap">
+    <div class="sh"><h2>Что продаём</h2></div>
+    <div class="cats cats-3">
+      {Object.values(GROUPS).map((g) => (
+        <a class="cat" href={u(g.slug + '/')}>
+          <div class="ph"><img src={pimg(g.img)} alt={g.title} loading="lazy"></div>
+          <div class="cat-b"><h3>{g.title}</h3><p>{g.note}</p><span class="cat-meta"><Icon name={g.icon} />от <span class="price">{rub(g.from)}</span></span></div>
+          <span class="go"><Icon name="arrow" /></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="sec" data-name="Зачем гаражные ковры">
+  <div class="wrap">
+    <div class="sh"><h2>Зачем нужны гаражные ковры</h2><a class="link" href={u('garazhnye-kovry/')}>Все размеры<Icon name="arrow" /></a></div>
+    <div class="feats">
+      <div class="feat"><span class="feat-ic"><Icon name="snow" /></span><h3>Пол цел зимой</h3><p>Стекающая с машины смесь реагентов, замерзая, разрушает покрытие пола даже в тёплом гараже. Ковры принимают её на себя.</p></div>
+      <div class="feat"><span class="feat-ic"><Icon name="tray" /></span><h3>Вода и грязь остаются внутри</h3><p>Борт <span class="key">45 мм</span> собирает стекающие с автомобиля реагенты, воду и грязь.</p></div>
+      <div class="feat"><span class="feat-ic"><Icon name="pedal" /></span><h3>Упор подскажет, где остановиться</h3><p>В конце полосы предусмотрен упор: он подскажет даже начинающему водителю, в какой момент остановиться.</p></div>
+      <div class="feat"><span class="feat-ic"><Icon name="doc" /></span><h3>Запатентованный продукт</h3><p>Разработан, освоен и выпускается компанией «Агатэк».</p></div>
+    </div>
+    <div class="where">
+      <h3>Где применяют</h3>
+      <ul>
+        <li><Icon name="garage" />Гаражи</li>
+        <li><Icon name="store" />Автосалоны</li>
+        <li><Icon name="factory" />Техсервисы</li>
+        <li><Icon name="building" />Отапливаемые парковочные места</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" data-name="Антибукса">
+  <div class="wrap">
+    <div class="anti">
+      <div class="anti-pic">
+        <img src={pimg('antibuksa-sneg-3')} alt="Антибукса под колесом в снегу" loading="lazy">
+        <span class="anti-badge"><Icon name="snow" />Снег, грязь, гололёд</span>
+      </div>
+      <div class="anti-b">
+        <h2>Антибукса</h2>
+        <p class="anti-lead">Противопробуксовочная лента для труднопроходимых участков дороги. Длина 90 см: помещается в багажник любого легкового автомобиля.</p>
+        <div class="anti-nums">
+          <div><b>940×200</b><span>мм, 2 ленты</span></div>
+          <div><b>7 мм</b><span>высота шипов</span></div>
+          <div><b>10 мм</b><span>высота протектора</span></div>
+        </div>
+        <ol class="howto">
+          <li><span class="n">1</span>Подложите ленту под ведущие колёса</li>
+          <li><span class="n">2</span>Без рывка плавно начните движение</li>
+        </ol>
+        <div class="anti-buy">
+          <span class="price">{rub(anti.price)}</span>
+          <button class="btn btn-acc" type="button" data-add={JSON.stringify({ slug: anti.slug, title: anti.short, price: anti.price, img: anti.img, url: u('antibuksa/') })}><Icon name="cart" />В корзину</button>
+          <a class="link" href={u('antibuksa/')}>Подробнее и 3D<Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" data-name="Фиксаторы">
+  <div class="wrap">
+    <div class="sh"><h2>Фиксаторы и клипсы</h2><a class="link" href={u('fiksatory/')}>Все фиксаторы<Icon name="arrow" /></a></div>
+    <div class="pcs pcs-4">
+      {[...byGroup('fiksatory'), PRODUCTS.find((p) => p.slug === 'fiksator-garazhnyh-kovrov')!].map((p) => <ProductCard p={p} />)}
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="about" data-name="О компании">
+  <div class="wrap">
+    <div class="about">
+      <div>
+        <h2>Производитель с 1992 года</h2>
+        <p>Группа компаний «Агатэк» создана в 1992 году и производит автомобильные ковры и аксессуары из резины и композитных материалов (полиуретан).</p>
+        <p class="maker"><Icon name="pin" />Казань · представительство в Москве</p>
+        <a class="link" href={u('o-proizvodstve/')}>О производстве<Icon name="arrow" /></a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>1992</b><span>год основания</span></div>
+        <div class="stat"><b>45</b><span>мм высота борта</span></div>
+        <div class="stat"><b>500</b><span>мм ширина полосы</span></div>
+        <div class="stat"><b>5</b><span>мм толщина</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="order" data-name="Как заказать">
+  <div class="wrap">
+    <div class="sh"><h2>Как заказать</h2><a class="link" href={u('dostavka-i-oplata/')}>Доставка и оплата<Icon name="arrow" /></a></div>
+    <Steps />
+    <Ways />
+  </div>
+</section>
+
+<section class="sec" data-name="Видео">
+  <div class="wrap">
+    <div class="sh"><h2>Агатэк в деле</h2><a class="link" href="https://www.youtube.com/channel/UCjapMa7ejqL1Ay8gTfzXbVw">Канал «Агатэк Коврики»<Icon name="arrow" /></a></div>
+    <Videos />
+  </div>
+</section>
+
+<section class="sec" id="opt" data-name="Опт">
+  <div class="wrap"><Opt /></div>
+</section>
+
+</Layout>

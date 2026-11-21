@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { u, COMPANY as K } from '../lib';
+---
+<Layout title="Корзина — Агатэк">
+<section data-name="Корзина">
+  <div class="wrap">
+    <Crumbs items={[['Корзина']]} />
+    <div class="ihead"><h1>Корзина</h1></div>
+    <div class="cart" data-cart>
+      <div class="cart-list">
+        <div class="cart-empty" data-cart-empty>
+          <span class="own-ic"><Icon name="cart" /></span>
+          <h2>Корзина пуста</h2>
+          <p>Выберите гаражные ковры, антибуксу или фиксаторы.</p>
+          <div class="own-a"><a class="btn btn-acc" href={u('garazhnye-kovry/')}>Гаражные ковры</a><a class="btn btn-ghost" href={u('antibuksa/')}>Антибукса</a><a class="btn btn-ghost" href={u('fiksatory/')}>Фиксаторы</a></div>
+        </div>
+        <ul class="cart-items" data-cart-items></ul>
+      </div>
+      <form class="form cart-form" data-order hidden>
+        <h3><Icon name="clipboard" />Оформление заказа</h3>
+        <div class="cart-total"><span>Итого</span><b class="price" data-cart-total>0 ₽</b></div>
+        <div class="inp"><label for="f-name">ФИО</label><input id="f-name" name="ФИО" required autocomplete="name"></div>
+        <div class="inp"><label for="f-tel">Телефон</label><input id="f-tel" name="Телефон" type="tel" required autocomplete="tel"></div>
+        <div class="inp"><label for="f-mail">E-mail</label><input id="f-mail" name="E-mail" type="email" autocomplete="email"></div>
+        <fieldset class="seg"><legend>Город</legend>
+          <label><input type="radio" name="Город" value="Казань" checked><span>Казань</span></label>
+          <label><input type="radio" name="Город" value="Другой город"><span>Другой город</span></label>
+        </fieldset>
+        <div class="inp" data-city hidden><label for="f-city">Впишите город</label><input id="f-city" name="Город доставки"></div>
+        <fieldset class="seg seg-col"><legend>Способ оплаты</legend>
+          <label><input type="radio" name="Оплата" value="Квитанция / QR-код" checked><span><Icon name="qr" />Квитанция или QR-код</span></label>
+          <label><input type="radio" name="Оплата" value="Расчётный счёт (юрлица)"><span><Icon name="bank" />Расчётный счёт (юрлица)</span></label>
+          <label data-cash><input type="radio" name="Оплата" value="Наличными при самовывозе"><span><Icon name="cash" />Наличными при самовывозе</span></label>
+        </fieldset>
+        <button class="btn btn-acc btn-lg" type="submit"><Icon name="check" />Подтвердить заказ</button>
+        <small>Откроется письмо с заказом на {K.email}. Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</small>
+      </form>
+    </div>
+  </div>
+</section>
+<script>
+  import { cart } from '../scripts/site.ts';
+  const list = document.querySelector<HTMLElement>('[data-cart-items]')!;
+  const empty = document.querySelector<HTMLElement>('[data-cart-empty]')!;
+  const form = document.querySelector<HTMLFormElement>('[data-order]')!;
+  const total = document.querySelector<HTMLElement>('[data-cart-total]')!;
+  const base = (window as any).__BASE as string;
+  const rub = (n: number) => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₽';
+  const draw = () => {
+    const c = cart.read();
+    empty.hidden = c.length > 0; form.hidden = c.length === 0;
+    list.innerHTML = c.map((i, n) => `<li class="ci"><a class="ph" href="${i.url}"><img src="${base}img/p/${i.img}.webp" alt=""></a><div class="ci-b"><a class="ci-t" href="${i.url}">${i.title}</a><span class="price">${rub(i.price)}</span></div><div class="qty" data-i="${n}"><button type="button" data-d="-1" aria-label="Меньше"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14"/></svg></button><span>${i.qty}</span><button type="button" data-d="1" aria-label="Больше"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div><b class="ci-sum">${rub(i.price * i.qty)}</b><button class="ib" type="button" data-del="${n}" aria-label="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10.5 11v5.5M13.5 11v5.5"/></svg></button></li>`).join('');
+    total.textContent = rub(c.reduce((a, i) => a + i.price * i.qty, 0));
+  };
+  list.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement; const c = cart.read();
+    const d = t.closest<HTMLElement>('[data-d]'); const del = t.closest<HTMLElement>('[data-del]');
+    if (d) { const i = Number(d.closest<HTMLElement>('[data-i]')!.dataset.i); c[i].qty = Math.max(1, c[i].qty + Number(d.dataset.d)); cart.write(c); draw(); }
+    if (del) { c.splice(Number(del.dataset.del), 1); cart.write(c); draw(); }
+  });
+  form.addEventListener('change', () => {
+    const other = (form.querySelector<HTMLInputElement>('input[name="Город"]:checked')!.value) !== 'Казань';
+    form.querySelector<HTMLElement>('[data-city]')!.hidden = !other;
+    form.querySelector<HTMLElement>('[data-cash]')!.hidden = other;
+  });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); if (!form.reportValidity()) return;
+    const c = cart.read();
+    const lines = c.map((i) => `${i.title} × ${i.qty} = ${rub(i.price * i.qty)}`).join('\n');
+    const f = [...new FormData(form).entries()].filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n');
+    const body = `Заказ с сайта\n\n${lines}\nИтого: ${total.textContent}\n\n${f}`;
+    location.href = `mailto:agatek@bk.ru?subject=${encodeURIComponent('Заказ с сайта')}&body=${encodeURIComponent(body)}`;
+  });
+  draw();
+</script>
+</Layout>

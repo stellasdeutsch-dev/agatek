@@ -1,0 +1,33 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Ways from '../../components/Ways.astro';
+import { byGroup, PRODUCTS } from '../../data/products';
+import { pimg } from '../../lib';
+---
+<Layout title="Фиксаторы и клипсы для ковров — Агатэк" current="catalog">
+<section data-name="Заголовок">
+  <div class="wrap">
+    <Crumbs items={[['Фиксаторы']]} />
+    <div class="ghead">
+      <div class="ghead-b">
+        <h1>Фиксаторы и клипсы</h1>
+        <p class="lead">Крепёж предназначен для надёжной фиксации ковров в салоне автомобиля. Клипсы можно установить на ковры любой марки автомобилей.</p>
+        <ul class="facts"><li><Icon name="clip" />Клипсы и вкрутки</li><li><Icon name="layers" />Фиксатор на 2 коврика</li><li><Icon name="garage" />Фиксатор гаражных ковров</li></ul>
+      </div>
+      <div class="ghead-pic ph"><img src={pimg('krepezh-nabor')} alt="Клипсы, вкрутка и фиксатор"></div>
+    </div>
+  </div>
+</section>
+<section class="sec sec-tight" data-name="Товары">
+  <div class="wrap"><div class="pcs pcs-4">{[...byGroup('fiksatory'), PRODUCTS.find((p) => p.slug === 'fiksator-garazhnyh-kovrov')!].map((p) => <ProductCard p={p} />)}</div></div>
+</section>
+<section class="sec" data-name="Совместимость">
+  <div class="wrap two">
+    <div class="box"><h2>Для каких машин клипсы</h2><p class="box-p">Идеально подходят для штатного крепления ковров на автомобили:</p><ul class="brands">{['Opel', 'Ford', 'Chevrolet', 'Volkswagen', 'Renault', 'Skoda', 'Audi', 'Seat'].map((b) => <li>{b}</li>)}</ul></div>
+    <div class="box"><h2>Доставка и оплата</h2><ul class="fits"><li><span class="wi"><Icon name="truck" /></span><span>СДЭК и ТК «Энергия» по России</span></li><li><span class="wi"><Icon name="store" /></span><span>Самовывоз, Казань</span></li><li><span class="wi"><Icon name="qr" /></span><span>Квитанция или QR-код в мобильном банке</span></li></ul></div>
+  </div>
+</section>
+</Layout>

@@ -1,0 +1,115 @@
+---
+import Icon from './Icon.astro';
+import Crumbs from './Crumbs.astro';
+import ProductCard from './ProductCard.astro';
+import Ways from './Ways.astro';
+import LenPicker from './LenPicker.astro';
+import Videos from './Videos.astro';
+import { u, pimg, rub, COMPANY as K } from '../lib';
+import { type Product, GROUPS, PRODUCTS, productPath } from '../data/products';
+interface Props { p: Product }
+const { p } = Astro.props;
+const g = GROUPS[p.group];
+const url = u(productPath(p));
+const add = JSON.stringify({ slug: p.slug, title: p.short, price: p.price, img: p.img, url });
+const view3d = p.length ? 'mats' : p.group === 'antibuksa' ? 'tape' : '';
+const photoKinds = new Set(['garazh-mazda', 'garazh-koleso', 'antibuksa-sneg-3', 'antibuksa-bagazhnik', 'antibuksa-shipy', 'kover-pod-bamper-chertezh']);
+const more = PRODUCTS.filter((x) => x.slug !== p.slug && (x.group === p.group || (p.group === 'garazh' && x.slug === 'antibuksa'))).slice(0, 3);
+const crumbs: [string, string?][] = p.group === 'antibuksa' ? [[p.short]] : [[g.title, g.slug + '/'], [p.short]];
+---
+<section data-name="Товар">
+  <div class="wrap">
+    <Crumbs items={crumbs} />
+    <div class="prod">
+      <div class="gal" data-gallery>
+        <div class="ph gal-main">
+          <img data-main src={pimg(p.gallery[0])} alt={p.title}>
+          {view3d && <div class="gal-3d s3d" data-3d={view3d} data-len={p.length}><div class="s3d-canvas"></div><span class="s3d-hint"><Icon name="rotate" />Потяните, чтобы повернуть</span></div>}
+          <span class="zone"><Icon name={g.icon} />{g.title}</span>
+        </div>
+        <div class="thumbs">
+          {view3d && <button class="thumb thumb-3d" type="button" aria-current="false" data-view="3d"><Icon name="box3d" /><span>3D</span></button>}
+          {p.gallery.map((im, n) => (
+            <button class="thumb" type="button" aria-current={String(n === 0)} data-src={pimg(im)} data-cover={photoKinds.has(im) ? '1' : '0'}><img src={pimg(im)} alt={`Фото ${n + 1}`} loading="lazy" class={photoKinds.has(im) ? 'cover' : ''}></button>
+          ))}
+        </div>
+      </div>
+      <div class="buy">
+        <h1>{p.title}</h1>
+        <div class="buy-meta">
+          {p.sku && <span><Icon name="tag" />Артикул {p.sku}</span>}
+          <span><Icon name="factory" />Производитель «Агатэк», Казань</span>
+        </div>
+        {p.specs.length > 0 && <div class="set-fill buy-feat">{p.specs.slice(0, 3).map(([k, v]) => <span><Icon name={/борт/i.test(k) ? 'tray' : /шип/i.test(k) ? 'snow' : /длин|размер|ширин/i.test(k) ? 'ruler' : 'layers'} />{k}: <b>{v}</b></span>)}</div>}
+        {p.length ? (
+          <LenPicker start={p.slug} compact links />
+        ) : (
+          <Fragment>
+            <div class="buy-price"><span class="price">{rub(p.price)}</span>{p.note && <span class="buy-note">{p.note}</span>}</div>
+            <div class="buy-row">
+              <div class="qty" data-qty><button type="button" aria-label="Меньше" data-d="-"><Icon name="minus" /></button><span id="qty">1</span><button type="button" aria-label="Больше" data-d="+"><Icon name="plus" /></button></div>
+              <button class="btn btn-acc btn-lg" type="button" data-add={add} data-qty-from="#qty"><Icon name="cart" />В корзину</button>
+              <a class="ib" href={`tel:${K.tel}`} aria-label="Позвонить"><Icon name="phone" /></a>
+            </div>
+          </Fragment>
+        )}
+        <ul class="mini-del">
+          <li><Icon name="truck" />СДЭК</li>
+          <li><Icon name="container" />ТК «Энергия»</li>
+          <li><Icon name="store" />Самовывоз, Казань</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" data-name="Характеристики">
+  <div class="wrap two">
+    <div class="box">
+      <h2>Характеристики</h2>
+      <dl class="specs">
+        {p.specs.map(([k, v]) => <div><dt><Icon name={/борт/i.test(k) ? 'tray' : /шип|протектор/i.test(k) ? 'snow' : /длин|размер|ширин|толщ/i.test(k) ? 'ruler' : /комплект|упаков/i.test(k) ? 'package' : 'layers'} />{k}</dt><dd>{/борт/i.test(k) ? <span class="key">{v}</span> : v}</dd></div>)}
+        {p.sku && <div><dt><Icon name="tag" />Артикул</dt><dd>{p.sku}</dd></div>}
+      </dl>
+    </div>
+    <div class="box">
+      <h2>{p.set ? 'В комплекте' : 'О товаре'}</h2>
+      {p.set && <ul class="fits">{p.set.map((s) => <li><span class="wi"><Icon name="check" /></span><span>{s}</span></li>)}</ul>}
+      {p.text && <div class="txt">{p.text.map((t) => <p>{t}</p>)}</div>}
+      {!p.set && !p.text && <div class="txt"><p>{g.note}.</p></div>}
+      {p.group === 'garazh' && <p class="txt-note"><Icon name="info" />Возможно изготовление любой длины. Подробнее — <a href={`tel:${K.tel}`}>{K.phone}</a></p>}
+    </div>
+  </div>
+</section>
+
+{p.group === 'antibuksa' && (
+  <section class="sec" data-name="Как применять">
+    <div class="wrap">
+      <div class="sh"><h2>Как применять</h2></div>
+      <div class="usage">
+        <div class="use"><img src={pimg('antibuksa-sneg-1')} alt="Ленту подкладывают под колесо" loading="lazy"><div><span class="n">1</span><b>Подложите ленту под ведущие колёса</b></div></div>
+        <div class="use"><img src={pimg('antibuksa-sneg-2')} alt="Машина выезжает по ленте" loading="lazy"><div><span class="n">2</span><b>Без рывка плавно начните движение</b></div></div>
+        <div class="use"><img src={pimg('antibuksa-bagazhnik')} alt="Антибукса в багажнике" loading="lazy"><div><span class="n"><Icon name="trunk" /></span><b>Длина 90 см: ленты легко помещаются в багажник</b></div></div>
+      </div>
+    </div>
+  </section>
+)}
+
+{(p.group === 'garazh' || p.group === 'antibuksa') && (
+  <section class="sec" data-name="Видео">
+    <div class="wrap"><div class="sh"><h2>Видео</h2></div><Videos only={p.group === 'antibuksa' ? 'antibuksa' : 'garazh'} /></div>
+  </section>
+)}
+
+<section class="sec" data-name="Доставка и оплата">
+  <div class="wrap"><div class="sh"><h2>Доставка и оплата</h2></div><Ways /></div>
+</section>
+
+{more.length > 0 && (
+  <section class="sec" data-name="С этим берут">
+    <div class="wrap">
+      <div class="sh"><h2>С этим берут</h2></div>
+      <div class="pcs">{more.map((x) => <ProductCard p={x} />)}</div>
+    </div>
+  </section>
+)}

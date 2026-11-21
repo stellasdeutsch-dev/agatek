@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import LenPicker from '../../components/LenPicker.astro';
+import Videos from '../../components/Videos.astro';
+import Ways from '../../components/Ways.astro';
+import { byGroup } from '../../data/products';
+import { pimg } from '../../lib';
+---
+<Layout title="Гаражные ковры от производителя — Агатэк" current="catalog">
+<section data-name="Заголовок">
+  <div class="wrap">
+    <Crumbs items={[['Гаражные ковры']]} />
+    <div class="ghead">
+      <div class="ghead-b">
+        <h1>Гаражные ковры</h1>
+        <p class="lead">Для защиты от грязи и снега напольных покрытий гаражей, автосалонов, техсервисов и отапливаемых парковочных мест.</p>
+        <div class="dims">
+          <div><b>500</b><span>мм ширина</span></div>
+          <div><b class="acc">45</b><span>мм высота борта</span></div>
+          <div><b>5</b><span>мм толщина</span></div>
+          <div><b>2</b><span>полосы в комплекте</span></div>
+        </div>
+      </div>
+      <div class="ghead-3d s3d" data-3d="mats" data-len="5"><div class="s3d-canvas"></div><span class="s3d-hint"><Icon name="rotate" />Потяните, чтобы повернуть</span></div>
+    </div>
+    <div class="pick-card pick-flat"><LenPicker /></div>
+  </div>
+</section>
+<section class="sec sec-tight" data-name="Товары">
+  <div class="wrap">
+    <div class="sh"><h2>Размеры и комплектующие</h2></div>
+    <div class="pcs pcs-5">{byGroup('garazh').map((p) => <ProductCard p={p} />)}</div>
+  </div>
+</section>
+<section class="sec" data-name="Как устроены">
+  <div class="wrap">
+    <div class="parts">
+      <div class="parts-pic"><img src={pimg('garazh-kovry-fiksator')} alt="Гаражные ковры с фиксатором" loading="lazy"></div>
+      <div class="parts-b">
+        <h2>Как устроены</h2>
+        <ol class="set-list">
+          <li><span class="n">1</span><div><b>Полоса с бортом 45 мм</b>Собирает стекающие с автомобиля реагенты, воду и грязь</div></li>
+          <li><span class="n">2</span><div><b>Упор</b>Подскажет даже начинающему водителю, в какой момент остановиться</div></li>
+          <li><span class="n">3</span><div><b>Фиксатор</b>Идёт в комплекте с гаражными коврами</div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="sec" data-name="Видео"><div class="wrap"><div class="sh"><h2>Эксплуатация и чистка</h2></div><Videos only="garazh" /></div></section>
+<section class="sec" data-name="Доставка и оплата"><div class="wrap"><div class="sh"><h2>Доставка и оплата</h2></div><Ways /></div></section>
+</Layout>
